@@ -1,0 +1,37 @@
+---
+title: "Assignment 5"
+author: "Srishti Patil"
+date: "2024-10-11"
+output: html_document
+---
+
+```{r}
+
+library(readxl)
+library(forecast)
+
+file_path <- "C:\\Users\\Srishti\\Desktop\\FALL24\\BF\\Assignment3\\Data_NewYork.xlsx"
+dataFile <- read_excel(file_path)
+
+timeSeriesData <- ts(dataFile$UnemployedLF, start=c(1976, 1), frequency=12)  
+plot(timeSeriesData)
+acf(timeSeriesData)
+
+# Decomposition
+decomposed_data <- decompose(timeSeriesData)
+str(dataFile$UnemployedLF)
+plot(decomposed_data)
+
+# Using stl
+stl_decomposition <- stl(timeSeriesData, s.window = "periodic")
+plot(stl_decomposition)
+
+#seasonal adjustments
+plot(timeSeriesData)
+lines(seasadj(stl_decomposition), col="Red")
+
+#Default period forecast
+f_stl <- forecast(stl_decomposition) 
+plot(f_stl)
+```
+
